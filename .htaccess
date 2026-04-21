@@ -1,0 +1,65 @@
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+<Files ~ "^.*\.([Hh][Tt][AaPp])">
+order allow,deny
+deny from all
+satisfy all
+</Files>
+
+# Éviter le spam de commentaires
+
+
+
+### FILTRE CONTRE CERTAINS ROBOTS DES PIRATES
+RewriteEngine On
+## EXCEPTION: TOUS LES ROBOTS MÊMES ANONYMES OU BANNIS PEUVENT ACCÉDER À CES FICHIERS
+RewriteCond %{REQUEST_URI} !^robots.txt
+RewriteCond %{REQUEST_URI} !^sitemap.xml
+## ANONYMES
+RewriteCond %{HTTP_USER_AGENT} ^-?$ [OR]
+## BIBLIOTHÈQUES / CLASSES HTTP DONT ON NE VEUT PAS. ATTENTION, CELA PEUT BLOQUER CERTAINES FONCTIONS DE VOTRE CMS. NE PAS TOUT EFFACER, MAIS CHERCHEZ LE NOM DE LA CLASSE HTTP CONCERNÉE (DEMANDEZ AUX DÉVELOPPEURS DE VOTRE CMS). CETTE LISTE BLOQUE 80% DES ROBOTS SPAMMEURS. IL FAUT LA CONSERVER.
+RewriteCond %{HTTP_USER_AGENT} ^curl|^Fetch\ API\ Request|GT::WWW|^HTTP::Lite|httplib|^Java|^LeechFTP|lwp-trivial|^LWP|libWeb|libwww|^PEAR|PECL::HTTP|PHPCrawl|PycURL|^ReGet|Rsync|Snoopy|URI::Fetch|urllib|WebDAV|^Wget|^AnyConnect|Nmap\ Scripting [NC]
+## CEUX QUI INVENTENT DES NOMS AU HASARD, RETIREZ LES 2 DIÈSES EN DÉBUT DE LIGNE POUR L'ACTIVER
+## RewriteCond %{HTTP_USER_AGENT} ^[bcdfghjklmnpqrstvwxz\ ]{10,}|^[0-9a-z]{15,}|^[0-9A-Za-z]{19,}|^[A-Za-z]{3,}\ [a-z]{4,}\ [a-z]{4,} [OR]
+RewriteRule (.*) [F]
+
+##Interdire l'affichage de certains formats de fichiers
+
+
+Options -Indexes
+
+
+## Définissez le fichier par défaut
+
+
+
+
+
+# Réécriture de index$ vers index.php
+RewriteRule ^index-index$  index.php
+RewriteRule ^page-connexion$  login.php
+RewriteRule ^model/Connexion.php$  erreur.php [L]
+RewriteRule ^sitemap.xml$  erreur.php [L]
+RewriteRule ^robots.txt$  erreur.php [L]
+
+
+# Réécriture des URL
+RewriteRule ^page-([0-9a-zA-Z\-]+)$  index.php?index=$1 [L]
+RewriteRule ^pages-([0-9a-zA-Z\-]+)-([0-9a-zA-Z\-]+)$  index.php?index=$1&id=$2 [L]
+RewriteRule ^data.html$  sysControlleur/Controleur.php [L]
+RewriteRule ^connexion.html$  login.php [L]
+RewriteRule ^offresEmploi.html$  jobs.php [L]
+RewriteRule ^print-invoice-([0-9]+)$  fact.php?id=$1 [L]
+RewriteRule ^print-job-carte-([0-9]+)$  carte_travail.php?id=$1 [L]
+
+RewriteRule ^docJobCarte-([0-9]+)$  sysControlleur/Controleur.php?pdfOrder=$1 [L]
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php81” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php81 .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
