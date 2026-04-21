@@ -1,0 +1,14 @@
+{
+    "name": "ivesn365/git_gararge",
+    "description": "Your project description",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
